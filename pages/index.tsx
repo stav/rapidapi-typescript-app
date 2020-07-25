@@ -1,6 +1,20 @@
+import { useState } from 'react'
 import Head from 'next/head'
 
+async function fetcher(): Promise<any> {
+  return await (await fetch('/api/hello')).json()
+}
+
 export default function Home() {
+
+  const [prices, setPrices] = useState([]);
+
+  async function getPrices(e): Promise<void> {
+    e.preventDefault()
+    const result = await fetcher()
+    setPrices(prices.concat(JSON.stringify(result)))
+  }
+
   return (
     <div className="container">
       <Head>
@@ -29,14 +43,14 @@ export default function Home() {
                 </div>
               </div>
               <div className="submit">
-                <button className="submit">Get Prices</button> &rarr;
+                <button className="submit" onClick={getPrices}>Get Prices</button> &rarr;
               </div>
             </form>
           </div>
 
           <div className="card code">
             <ul>
-              <li>Prices</li>
+              {prices.map((price, i) => <li key={i}><code>{price}</code></li>)}
             </ul>
           </div>
         </div>
