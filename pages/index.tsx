@@ -1,18 +1,14 @@
 import { useState } from 'react'
 import Head from 'next/head'
 
-async function fetcher(): Promise<any> {
-  return await (await fetch('/api/hello')).json()
-}
-
 export default function Home() {
 
   const [prices, setPrices] = useState([]);
 
   async function getPrices(e): Promise<void> {
-    e.preventDefault()
-    const result = await fetcher()
-    setPrices(prices.concat(JSON.stringify(result)))
+    e.preventDefault() // prevent the page from actually submitting the form
+    const result = await (await fetch('/api/hello')).text()
+    setPrices(prices.concat(result))
   }
 
   return (
@@ -26,7 +22,7 @@ export default function Home() {
         <h3 className="title"> Crypto Prices </h3>
 
         <div className="grid">
-          <div className="card">
+          <div className="form card">
             <form lang="en">
               <div>
                 <div>
@@ -48,7 +44,7 @@ export default function Home() {
             </form>
           </div>
 
-          <div className="card code">
+          <div className="code card">
             <ul>
               {prices.map((price, i) => <li key={i}><code>{price}</code></li>)}
             </ul>

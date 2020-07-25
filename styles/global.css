@@ -56,13 +56,11 @@ code {
   display: flex;
   align-items: center;
   justify-content: center;
-  max-width: 800px;
   margin-top: 3rem;
 }
 
 .card {
   margin: 1rem;
-  flex-basis: 45%;
   padding: 1.5rem;
   text-align: left;
   color: inherit;
@@ -111,4 +109,13 @@ button.submit:hover {
 button.submit:active {
   position:relative;
   top:1px;
+}
+
+.card.form {
+  max-width: 300px;
+}
+
+.card.code ul li {
+  overflow-wrap: anywhere;
+  padding-bottom: 10px;
 }
