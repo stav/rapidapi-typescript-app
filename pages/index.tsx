@@ -1,13 +1,20 @@
 import { useState } from 'react'
 import Head from 'next/head'
 
+async function fetcher() {
+  const res = await fetch('/api/prices', {
+    method: 'GET', // *GET, POST, PUT, DELETE, etc.
+  })
+  return await res.text()
+}
+
 export default function Home() {
 
   const [prices, setPrices] = useState([]);
 
-  async function getPrices(e): Promise<void> {
-    e.preventDefault() // prevent the page from actually submitting the form
-    const result = await (await fetch('/api/hello')).text()
+  async function getPrices(e) {
+    e.preventDefault() // prevent page from submitting form
+    const result = await fetcher()
     setPrices(prices.concat(result))
   }
 
