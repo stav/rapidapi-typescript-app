@@ -1,15 +1,16 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 
-async function external(url: string, config?: object): Promise<any> {
+async function external(url: string, config?: object): Promise<my.CryptocompareResult> {
   const res = await fetch(url, config)
   const data = await res.json()
   return data
 }
 
-async function get(req, res): Promise<any> {
+async function get(req: NextApiRequest, res: NextApiResponse<string>): Promise<string> {
   return 'Helpful information'
 }
 
-async function post(req, res): Promise<any> {
+async function post(req: NextApiRequest, res: NextApiResponse<my.PriceResult>): Promise<my.PriceResult> {
   const params = {
     denominator: req.body.currency,
     exchange: req.body.exchange,
@@ -18,7 +19,7 @@ async function post(req, res): Promise<any> {
   const priceUrl = new URL('https://crypto-asset-market-data-unified-apis-for-professionals.p.rapidapi.com/api/v1/exchanges/trades');
   priceUrl.search = (new URLSearchParams(params)).toString();
 
-  const remoteResponse = await external(
+  const remoteResponse: my.CryptocompareResult = await external(
     priceUrl.toString(),
     {
       headers: {
@@ -36,7 +37,7 @@ async function post(req, res): Promise<any> {
   return response
 }
 
-export default async function (req, res): Promise<any> {
+export default async function (req: NextApiRequest, res: NextApiResponse<string | my.PriceResult>): Promise<any> {
   switch (req.method) {
     case 'GET':
       res.status(200).send(await get(req, res))

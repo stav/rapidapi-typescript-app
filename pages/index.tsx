@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import Head from 'next/head'
 
-async function fetcher(data: object) {
+async function fetcher(data: object): Promise<my.PriceResult> {
   const res = await fetch('/api/prices', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data) // body data type must match "Content-Type" header
   })
-  return await res.text()
+  return await res.json()
 }
 
 function getValue(name: string): string {
@@ -22,12 +22,12 @@ export default function Home() {
 
   async function getPrices(e): Promise<void> {
     e.preventDefault()
-    const result = await fetcher({
+    const result: my.PriceResult = await fetcher({
       currency: getValue('currency'),
       exchange: getValue('exchange'),
       symbol: getValue('symbol'),
     })
-    setPrices(prices.concat(result))
+    setPrices(prices.concat(JSON.stringify(result)))
   }
 
   return (
