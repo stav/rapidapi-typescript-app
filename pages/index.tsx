@@ -1,20 +1,32 @@
 import { useState } from 'react'
 import Head from 'next/head'
 
-async function fetcher() {
+async function fetcher(data: object) {
   const res = await fetch('/api/prices', {
-    method: 'GET', // *GET, POST, PUT, DELETE, etc.
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data) // body data type must match "Content-Type" header
   })
   return await res.text()
+}
+
+function getValue(name: string): string {
+  const elements = document.getElementsByTagName('form')[0].elements
+  const element = elements.namedItem(name) as HTMLInputElement
+  return element.value || element.dataset.default
 }
 
 export default function Home() {
 
   const [prices, setPrices] = useState([]);
 
-  async function getPrices(e) {
-    e.preventDefault() // prevent page from submitting form
-    const result = await fetcher()
+  async function getPrices(e): Promise<void> {
+    e.preventDefault()
+    const result = await fetcher({
+      currency: getValue('currency'),
+      exchange: getValue('exchange'),
+      symbol: getValue('symbol'),
+    })
     setPrices(prices.concat(result))
   }
 
